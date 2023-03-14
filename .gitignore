@@ -1,0 +1,6 @@
+
+config.json
+.terraform*
+terraform.tfstate*
+terraform.tfvars
+*.cert
