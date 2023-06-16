@@ -79,7 +79,7 @@ echo "\n Close indices on target"
 # # Close all indices on target so we can perform the restore on top of it, without touching the icd-auth index, which is protected by ICD
 
 curl -ksS "https://${target_username}:${target_password}@${target_endpoint}:${target_port}/_cat/indices/?h=index" | \
-grep -v -e '^icd-auth$' | \
+grep -v -e '^icd-auth$' -e '^.security-7*' -e '^.kibana*' -e '^.fleet*' -e '^.tasks*' -e '^.apm*' -e '^webcrawler$'| \
 while read index; do
   echo "closing index $index"
   curl -ksS -XPOST "https://${target_username}:${target_password}@${target_endpoint}:${target_port}/$index/_close"
@@ -94,7 +94,7 @@ curl -H 'Content-Type: application/json' -ksS -XPOST \
 
 echo "\n Re-open all indices in target just in case some were not re-opened during the latest restore"
 curl -ksS "https://${target_username}:${target_password}@${target_endpoint}:${target_port}/_cat/indices/?h=index" | \
-grep -v -e '^icd-auth$' | \
+grep -v -e '^icd-auth$' -e '^.security-7*' -e '^.kibana*' -e '^.fleet*' -e '^.tasks*' -e '^.apm*' -e '^webcrawler$' | \
 while read index; do
   echo "reopening index $index"
   curl -ksS -XPOST "https://${target_username}:${target_password}@${target_endpoint}:${target_port}/$index/_open"
